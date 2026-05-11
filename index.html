@@ -31,7 +31,7 @@ body {
   margin-bottom: 15px;
 }
 
-/* COURSE ICONS */
+/* COURSE BUTTONS */
 .course {
   display: flex;
   align-items: center;
@@ -39,6 +39,7 @@ body {
   padding: 10px;
   cursor: pointer;
   border-radius: 10px;
+  margin-bottom: 6px;
 }
 
 .course:hover {
@@ -98,11 +99,6 @@ body {
 .view.active {
   display: block;
 }
-
-/* ADMIN SPECIAL */
-.admin-card {
-  border-color: #b46bff;
-}
 </style>
 </head>
 
@@ -115,29 +111,21 @@ body {
     <div class="logo">✦ Nova Study</div>
 
     <div class="course" onclick="show('dashboard')">
-      <div class="icon a">A</div> Dashboard
+      <div class="icon a">D</div> Dashboard
     </div>
 
-    <div class="course">
-      <div class="icon a">A</div> Algebra
+    <div class="course" onclick="show('assignments')">
+      <div class="icon a">A</div> Assignments
     </div>
 
-    <div class="course">
-      <div class="icon g">G</div> Geometry
+    <div class="course" onclick="show('grades')">
+      <div class="icon g">G</div> Grades
     </div>
 
-    <div class="course">
-      <div class="icon s">S</div> Science
+    <div class="course" onclick="show('modules')">
+      <div class="icon s">M</div> Modules
     </div>
 
-    <button onclick="show('assignments')">Assignments</button>
-    <button onclick="show('grades')">Grades</button>
-    <button onclick="show('modules')">Modules</button>
-
-    <!-- hidden admin button -->
-    <button id="adminBtn" style="display:none;" onclick="show('admin')">
-      Admin Panel
-    </button>
   </div>
 
   <!-- MAIN -->
@@ -176,60 +164,31 @@ body {
       <div class="card">Science Labs</div>
     </div>
 
-    <!-- 🔒 ADMIN (UNLOCKED BY N0VA32) -->
-    <div id="admin" class="view">
-      <div class="card admin-card">🔒 Nova Admin Panel</div>
-
-      <div class="card">System Status: Online</div>
-      <div class="card">Debug Mode: Enabled</div>
-
-      <!-- 👇 REDIRECT PLACEHOLDER -->
-      <div class="card">
-        Redirect File Slot:
-        <br>
-        <code>PUT YOUR FILE HERE (example: secret.html)</code>
-      </div>
-
-    </div>
-
   </div>
 
 </div>
 
 <script>
-
 const code = "N0VA32";
-let unlocked = false;
 
-/* SWITCH VIEWS */
+/* PAGE SWITCH */
 function show(page) {
   document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
   document.getElementById(page).classList.add("active");
 }
 
-/* SECRET CODE */
+/* SECRET CODE → REDIRECT */
 document.querySelector(".search").addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
 
-    const val = e.target.value.trim();
+    const val = e.target.value.trim().toUpperCase();
 
-    if (val.toUpperCase() === code) {
-
-      unlocked = true;
-
+    if (val === code) {
       e.target.value = "";
       e.target.placeholder = "Access granted...";
 
-      // unlock admin button
-      document.getElementById("adminBtn").style.display = "block";
-
-      // auto-open admin page
-      show("admin");
-
-      // OPTIONAL REDIRECT (uncomment when you want)
-      /*
-      window.location.href = "YOUR-FILE-HERE.html";
-      */
+      // 🔥 CHANGE THIS FILE NAME TO YOUR REPO FILE
+      window.location.href = "redirect.html";
 
     } else {
       e.target.value = "";
@@ -238,7 +197,6 @@ document.querySelector(".search").addEventListener("keydown", (e) => {
 
   }
 });
-
 </script>
 
 </body>
