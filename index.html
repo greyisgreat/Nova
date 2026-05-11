@@ -1,246 +1,245 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-	<meta charset="UTF-8">
-	<title>Nova Dashboard</title>
+<meta charset="UTF-8">
+<title>Nova Study</title>
 
-	<style>
-		:root {
-			--bg: #0b0b10;
-			--panel: #1a102a;
-			--panel2: #120a20;
+<style>
+body {
+  margin: 0;
+  font-family: system-ui, Arial;
+  background: #0f0f14;
+  color: #f2f2f7;
+}
 
-			--accent: #b46bff;
-			--accent2: #7a2cff;
+.app {
+  display: flex;
+  height: 100vh;
+}
 
-			--text: #f2eaff;
-			--muted: #b9a8d6;
-		}
+/* SIDEBAR */
+.sidebar {
+  width: 270px;
+  background: #12121a;
+  padding: 16px;
+  border-right: 1px solid rgba(180,107,255,0.2);
+}
 
-		* {
-			box-sizing: border-box;
-			font-family: system-ui, Arial, sans-serif;
-		}
+.logo {
+  color: #b46bff;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
 
-		body {
-			margin: 0;
-			background: var(--bg);
-			color: var(--text);
-		}
+/* COURSE ICONS */
+.course {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 10px;
+}
 
-		/* LAYOUT */
-		.app {
-			display: flex;
-			height: 100vh;
-		}
+.course:hover {
+  background: rgba(180,107,255,0.08);
+}
 
-		/* SIDEBAR */
-		.sidebar {
-			width: 250px;
-			background: rgba(10, 8, 18, 0.95);
-			border-right: 1px solid rgba(180, 107, 255, 0.2);
-			padding: 18px;
-		}
+.icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  color: white;
+}
 
-		.logo {
-			font-size: 20px;
-			font-weight: bold;
-			color: var(--accent);
-			margin-bottom: 20px;
-			letter-spacing: 1px;
-		}
+.a { background: #a855f7; }
+.g { background: #ec4899; }
+.s { background: #f97316; }
 
-		.nav button {
-			width: 100%;
-			margin-bottom: 10px;
-			padding: 10px;
-			border-radius: 10px;
-			border: 1px solid rgba(180, 107, 255, 0.2);
-			background: rgba(255, 255, 255, 0.03);
-			color: var(--text);
-			cursor: pointer;
-			text-align: left;
-		}
+/* MAIN */
+.main {
+  flex: 1;
+  padding: 20px;
+}
 
-		/* MAIN */
-		.main {
-			flex: 1;
-			padding: 25px;
-			overflow-y: auto;
-		}
+/* TOP */
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-		.top {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			margin-bottom: 20px;
-		}
+.search {
+  padding: 10px;
+  width: 300px;
+  border-radius: 10px;
+  border: 1px solid rgba(180,107,255,0.2);
+  background: #171722;
+  color: white;
+}
 
-		.search {
-			width: 300px;
-			padding: 10px;
-			border-radius: 10px;
-			border: 1px solid rgba(180, 107, 255, 0.25);
-			background: rgba(255, 255, 255, 0.03);
-			color: white;
-			outline: none;
-		}
+/* CARDS */
+.card {
+  background: #171722;
+  padding: 14px;
+  margin-top: 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(180,107,255,0.15);
+}
 
-		/* GRID */
-		.grid {
-			display: grid;
-			grid-template-columns: repeat(3, 1fr);
-			gap: 15px;
-		}
+/* VIEWS */
+.view {
+  display: none;
+}
 
-		.card {
-			background: linear-gradient(180deg, var(--panel), var(--panel2));
-			border: 1px solid rgba(180, 107, 255, 0.18);
-			border-radius: 14px;
-			padding: 16px;
-		}
+.view.active {
+  display: block;
+}
 
-		.card h3 {
-			margin: 0 0 6px;
-			color: var(--accent);
-		}
-
-		.small {
-			font-size: 13px;
-			color: var(--muted);
-		}
-
-		.bar {
-			height: 8px;
-			background: rgba(255, 255, 255, 0.08);
-			border-radius: 10px;
-			margin-top: 10px;
-			overflow: hidden;
-		}
-
-		.fill {
-			height: 100%;
-			width: 60%;
-			background: linear-gradient(90deg, var(--accent2), var(--accent));
-		}
-
-		/* SECTION */
-		.section {
-			margin-top: 25px;
-		}
-
-		.panel {
-			background: rgba(255, 255, 255, 0.03);
-			border: 1px solid rgba(180, 107, 255, 0.15);
-			padding: 14px;
-			border-radius: 12px;
-			margin-bottom: 10px;
-		}
-	</style>
+/* ADMIN SPECIAL */
+.admin-card {
+  border-color: #b46bff;
+}
+</style>
 </head>
 
 <body>
 
-	<div class="app">
+<div class="app">
 
-		<!-- SIDEBAR -->
-		<div class="sidebar">
-			<div class="logo">✦ Nova</div>
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="logo">✦ Nova Study</div>
 
-			<div class="nav">
-				<button>Dashboard</button>
-				<button>Courses</button>
-				<button onclick="go('prep')">Test Prep</button>
-				<button onclick="go('grades')">Grades</button>
-				<button>Assignments</button>
-				<button>Settings</button>
-			</div>
-		</div>
-
-		<!-- MAIN -->
-		<div class="main">
-
-			<div class="top">
-				<h2>Dashboard</h2>
-				<input class="search" placeholder="Search courses or grades...">
+    <div class="course" onclick="show('dashboard')">
+      <div class="icon a">A</div> Dashboard
     </div>
 
-				<div class="grid">
+    <div class="course">
+      <div class="icon a">A</div> Algebra
+    </div>
 
-					<div class="card">
-						<h3>Algebra</h3>
-						<div class="small">Course Progress</div>
-						<div class="bar">
-							<div class="fill"></div>
-						</div>
-					</div>
+    <div class="course">
+      <div class="icon g">G</div> Geometry
+    </div>
 
-					<div class="card">
-						<h3>Geometry</h3>
-						<div class="small">Course Progress</div>
-						<div class="bar">
-							<div class="fill" style="width:45%"></div>
-						</div>
-					</div>
+    <div class="course">
+      <div class="icon s">S</div> Science
+    </div>
 
-					<div class="card">
-						<h3>Test Prep</h3>
-						<div class="small">Exam readiness</div>
-						<div class="bar">
-							<div class="fill" style="width:70%"></div>
-						</div>
-					</div>
+    <button onclick="show('assignments')">Assignments</button>
+    <button onclick="show('grades')">Grades</button>
+    <button onclick="show('modules')">Modules</button>
 
-				</div>
+    <!-- hidden admin button -->
+    <button id="adminBtn" style="display:none;" onclick="show('admin')">
+      Admin Panel
+    </button>
+  </div>
 
-				<div class="section">
-					<h3>Announcements</h3>
-					<div class="panel">New test prep module unlocked.</div>
-					<div class="panel">Geometry quiz due Friday.</div>
-				</div>
+  <!-- MAIN -->
+  <div class="main">
 
-			</div>
-		</div>
+    <div class="top">
+      <h2>Nova Study</h2>
+      <input class="search" placeholder="Search...">
+    </div>
 
-		<script>
-			const ROUTES = {
-  rift: "dfghjmnbvcfdghjnbvfghjkjhgyujhgvfghyujkjhgujnbvghyujhbgvfgtyhgfvcd.html",
-  prep: "test-prep.html",
-  grades: "grades.html"
-};
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="view active">
+      <div class="card">📘 Algebra Progress: 62%</div>
+      <div class="card">📗 Geometry Quiz due Friday</div>
+      <div class="card">📕 Science Lab due Wednesday</div>
+    </div>
 
-function go(page) {
-  window.location.href = ROUTES[page];
+    <!-- ASSIGNMENTS -->
+    <div id="assignments" class="view">
+      <div class="card">Geometry Quiz Review — Due Friday</div>
+      <div class="card">Algebra Worksheet 5 — Due Monday</div>
+      <div class="card">Science Notes — Due Wednesday</div>
+    </div>
+
+    <!-- GRADES -->
+    <div id="grades" class="view">
+      <div class="card">Algebra: A-</div>
+      <div class="card">Geometry: B+</div>
+      <div class="card">Science: A</div>
+    </div>
+
+    <!-- MODULES -->
+    <div id="modules" class="view">
+      <div class="card">Algebra Basics</div>
+      <div class="card">Geometry Shapes</div>
+      <div class="card">Science Labs</div>
+    </div>
+
+    <!-- 🔒 ADMIN (UNLOCKED BY N0VA32) -->
+    <div id="admin" class="view">
+      <div class="card admin-card">🔒 Nova Admin Panel</div>
+
+      <div class="card">System Status: Online</div>
+      <div class="card">Debug Mode: Enabled</div>
+
+      <!-- 👇 REDIRECT PLACEHOLDER -->
+      <div class="card">
+        Redirect File Slot:
+        <br>
+        <code>PUT YOUR FILE HERE (example: secret.html)</code>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+const code = "N0VA32";
+let unlocked = false;
+
+/* SWITCH VIEWS */
+function show(page) {
+  document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+  document.getElementById(page).classList.add("active");
 }
 
-/* SECRET CODE SYSTEM */
-window.addEventListener("DOMContentLoaded", () => {
+/* SECRET CODE */
+document.querySelector(".search").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
 
-  const search = document.querySelector(".search");
-  const code = "r1ft31";
+    const val = e.target.value.trim();
 
-  search.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
+    if (val.toUpperCase() === code) {
 
-      const val = search.value.trim();
+      unlocked = true;
 
-      if (val === code) {
-        search.value = "Access granted...";
-        setTimeout(() => {
-          window.location.href = ROUTES.rift;
-        }, 500);
-      } else {
-        search.value = "";
-        search.placeholder = "Access denied";
-      }
+      e.target.value = "";
+      e.target.placeholder = "Access granted...";
 
+      // unlock admin button
+      document.getElementById("adminBtn").style.display = "block";
+
+      // auto-open admin page
+      show("admin");
+
+      // OPTIONAL REDIRECT (uncomment when you want)
+      /*
+      window.location.href = "YOUR-FILE-HERE.html";
+      */
+
+    } else {
+      e.target.value = "";
+      e.target.placeholder = "Access denied";
     }
-  });
 
+  }
 });
-		</script>
+
+</script>
 
 </body>
-
 </html>
