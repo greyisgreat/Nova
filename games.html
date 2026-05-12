@@ -28,6 +28,7 @@ body{
     linear-gradient(180deg,var(--bg1),var(--bg2));
 }
 
+/* BACKGROUND GRID */
 body::after{
   content:"";
   position:fixed;
@@ -43,6 +44,7 @@ body::after{
   padding:24px;
   display:flex;
   align-items:center;
+  justify-content:space-between;
 }
 
 .brand{
@@ -70,15 +72,37 @@ body::after{
   color:var(--accent);
 }
 
+/* SEARCH */
+.searchBar{
+  width:220px;
+  padding:10px 12px;
+  border-radius:12px;
+
+  border:1px solid rgba(255,255,255,.15);
+  background:rgba(255,255,255,.05);
+  color:white;
+
+  outline:none;
+  backdrop-filter:blur(10px);
+  transition:.2s;
+}
+
+.searchBar:focus{
+  border-color:var(--accent);
+  width:260px;
+}
+
 /* MENU */
 .menuWrap{
   display:flex;
   justify-content:center;
   margin-bottom:30px;
+  position:relative;
+  z-index:1000;
 }
 
 .menu{
-  width:820px;
+  width:860px;
   max-width:92%;
   position:relative;
 
@@ -91,7 +115,10 @@ body::after{
 
   background:linear-gradient(90deg,var(--accent),var(--accent2));
   box-shadow:0 14px 40px rgba(0,0,0,.45);
+
   overflow:visible;
+
+  transition:.3s;
 }
 
 .menuBtn{
@@ -119,7 +146,7 @@ body::after{
   border:2px solid rgba(255,255,255,.8);
 }
 
-/* CENTER */
+/* CENTER ORB */
 .centerOrb{
   position:absolute;
   top:-38px;
@@ -128,12 +155,16 @@ body::after{
   width:110px;
   height:110px;
   border-radius:50%;
+
   display:flex;
   align-items:center;
   justify-content:center;
+
   background:linear-gradient(135deg,var(--accent),var(--accent2));
   border:7px solid #090914;
   box-shadow:0 0 35px rgba(180,107,255,.5);
+
+  z-index:999;
 }
 
 .centerInner{
@@ -165,7 +196,7 @@ body::after{
   opacity:0;
   transform:translateY(-10px);
   pointer-events:none;
-  transition:.15s ease;
+  transition:.2s ease;
 
   z-index:99999;
 }
@@ -179,11 +210,27 @@ body::after{
 .themeOption{
   padding:14px 16px;
   cursor:pointer;
-  transition:.15s;
 }
 
 .themeOption:hover{
   background:rgba(255,255,255,.08);
+}
+
+/* VIEW ANIMATION SYSTEM */
+.view{
+  opacity:0;
+  transform:translateY(10px);
+  transition:.25s ease;
+  pointer-events:none;
+  position:absolute;
+  width:100%;
+}
+
+.view.active{
+  opacity:1;
+  transform:translateY(0);
+  pointer-events:auto;
+  position:relative;
 }
 
 /* GRID */
@@ -199,9 +246,14 @@ body::after{
   display:grid;
   grid-template-columns:repeat(5,1fr);
   gap:14px;
-  padding:0 20px 30px;
+
+  padding:140px 20px 30px;
+
+  position:relative;
+  z-index:1;
 }
 
+/* GAME */
 .game{
   aspect-ratio:1/1;
   border-radius:18px;
@@ -248,105 +300,125 @@ body::after{
   border:1px solid rgba(255,255,255,0.12);
   border-radius:18px;
   line-height:1.7;
+  backdrop-filter:blur(10px);
 }
+
+/* THEMES */
+.nebula{--accent:#b46bff;--accent2:#ff4fd8;--bg1:#050510;--bg2:#0b0b1d;}
+.aqua{--accent:#53d8ff;--accent2:#4d7cff;--bg1:#04111a;--bg2:#071d2b;}
+.crimson{--accent:#ff4d6d;--accent2:#ff8c42;--bg1:#14060b;--bg2:#220b14;}
+.lime{--accent:#7dff7d;--accent2:#00ffaa;--bg1:#07140d;--bg2:#0c2118;}
+.gold{--accent:#ffd54d;--accent2:#ff9f43;--bg1:#171005;--bg2:#241605;}
+.velvet{--accent:#d66bff;--accent2:#ff6bd6;--bg1:#120714;--bg2:#1c0b24;}
 
 </style>
 </head>
 
-<body>
+<body class="nebula">
 
 <div class="top">
   <div class="brand">
     <div class="logo">✦</div>
     <div class="title">Nova Games</div>
   </div>
+
+  <input class="searchBar" placeholder="Search games..." oninput="filterGames(this.value)">
 </div>
 
 <div class="menuWrap">
   <div class="menu">
 
-    <button class="menuBtn" onclick="showHome()">
-      <div class="menuIcon"></div>
-      Home
-    </button>
-
-    <button class="menuBtn" onclick="showAbout()">
-      <div class="menuIcon"></div>
-      About
-    </button>
+    <button class="menuBtn" onclick="showView('home')">Home</button>
+    <button class="menuBtn" onclick="showView('about')">About</button>
 
     <div class="centerOrb">
       <div class="centerInner">✦</div>
     </div>
 
-    <button class="menuBtn" onclick="showRecent()">
-      <div class="menuIcon"></div>
-      Recent
-    </button>
-
-    <button class="menuBtn" onclick="toggleThemes()">
-      <div class="menuIcon"></div>
-      Themes
-    </button>
+    <button class="menuBtn" onclick="showView('recent')">Recent</button>
+    <button class="menuBtn" onclick="toggleThemes()">Themes</button>
 
   </div>
 </div>
 
-<!-- DROPDOWN -->
 <div class="themeDropdown" id="themeDropdown">
-  <div class="themeOption" onclick="setTheme('nebula')">Nebula Drift</div>
-  <div class="themeOption" onclick="setTheme('aqua')">Aqua Pulse</div>
-  <div class="themeOption" onclick="setTheme('crimson')">Crimson Orbit</div>
-  <div class="themeOption" onclick="setTheme('lime')">Lime Reactor</div>
-  <div class="themeOption" onclick="setTheme('gold')">Golden Nova</div>
-  <div class="themeOption" onclick="setTheme('velvet')">Velvet Void</div>
+  <div class="themeOption" onclick="applyTheme('nebula')">Nebula Drift</div>
+  <div class="themeOption" onclick="applyTheme('aqua')">Aqua Pulse</div>
+  <div class="themeOption" onclick="applyTheme('crimson')">Crimson Orbit</div>
+  <div class="themeOption" onclick="applyTheme('lime')">Lime Reactor</div>
+  <div class="themeOption" onclick="applyTheme('gold')">Golden Nova</div>
+  <div class="themeOption" onclick="applyTheme('velvet')">Velvet Void</div>
 </div>
 
 <div class="sectionTitle" id="sectionTitle">All Games</div>
-<div class="grid" id="grid"></div>
+
+<div id="home" class="view active">
+  <div class="grid" id="grid"></div>
+</div>
+
+<div id="about" class="view">
+  <div class="grid">
+    <div class="aboutBox">
+      <h2 style="color:var(--accent);">Nova Games</h2>
+
+      <p>Nova Games is a lightweight browser-based game launcher built for fast, smooth, distraction-free gameplay.</p>
+
+      <p>It focuses on instant launching, clean UI, and theme customization.</p>
+
+      <p><b>GitHub:</b> https://github.com/greyisgreat/Nova/tree/main</p>
+    </div>
+  </div>
+</div>
+
+<div id="recent" class="view">
+  <div class="grid" id="recentGrid"></div>
+</div>
 
 <script>
 
 let games=[], icons={};
+let recentGames=JSON.parse(localStorage.getItem("recentGames"))||[];
 
 const grid=document.getElementById("grid");
+const recentGrid=document.getElementById("recentGrid");
 const sectionTitle=document.getElementById("sectionTitle");
 const themeDropdown=document.getElementById("themeDropdown");
 
-let recentGames=JSON.parse(localStorage.getItem("recentGames"))||[];
+const views={
+  home:document.getElementById("home"),
+  about:document.getElementById("about"),
+  recent:document.getElementById("recent")
+};
 
-function closeDropdown(){
-  themeDropdown.classList.remove("active");
-}
+let allGames=[];
 
 Promise.all([
   fetch("games.json").then(r=>r.json()),
   fetch("icons.json").then(r=>r.json())
 ]).then(([g,i])=>{
-  games=g; icons=i;
-  showHome();
+  allGames=g;
+  icons=i;
+  build(allGames);
+  showView("home");
 });
 
-/* NAME FIX */
+/* CLEAN NAME */
 function cleanName(path){
   let parts=path.split("/");
-  let name;
-
-  if(parts[parts.length-1]==="index.html"){
-    name=parts[parts.length-2];
-  } else {
-    name=parts[parts.length-1].replace(".html","");
-  }
+  let name=(parts.at(-1)==="index.html")
+    ? parts.at(-2)
+    : parts.at(-1).replace(".html","");
 
   return name.replace(/[-_]/g," ").replace(/\b\w/g,c=>c.toUpperCase());
 }
 
+/* BUILD */
 function build(list){
   grid.innerHTML="";
   list.forEach(game=>{
-    const t=document.createElement("div");
-    t.className="game";
-    t.onclick=()=>launch(game);
+    const d=document.createElement("div");
+    d.className="game";
+    d.onclick=()=>launch(game);
 
     const img=document.createElement("img");
     img.src=icons[game]||"";
@@ -355,12 +427,48 @@ function build(list){
     label.className="label";
     label.textContent=cleanName(game);
 
-    t.appendChild(img);
-    t.appendChild(label);
-    grid.appendChild(t);
+    d.appendChild(img);
+    d.appendChild(label);
+    grid.appendChild(d);
   });
 }
 
+/* FILTER */
+function filterGames(q){
+  q=q.toLowerCase();
+  build(allGames.filter(g=>cleanName(g).toLowerCase().includes(q)));
+}
+
+/* RECENT */
+function buildRecent(){
+  recentGrid.innerHTML="";
+  recentGames.forEach(game=>{
+    const d=document.createElement("div");
+    d.className="game";
+    d.onclick=()=>launch(game);
+
+    const img=document.createElement("img");
+    img.src=icons[game]||"";
+
+    const label=document.createElement("div");
+    label.className="label";
+    label.textContent=cleanName(game);
+
+    d.appendChild(img);
+    d.appendChild(label);
+    recentGrid.appendChild(d);
+  });
+}
+
+/* NAV */
+function showView(v){
+  Object.values(views).forEach(x=>x.classList.remove("active"));
+  views[v].classList.add("active");
+
+  if(v==="recent") buildRecent();
+}
+
+/* LAUNCH */
 function launch(game){
   recentGames=recentGames.filter(g=>g!==game);
   recentGames.unshift(game);
@@ -369,62 +477,36 @@ function launch(game){
   window.location.href=game;
 }
 
-function showHome(){
+/* THEMES */
+function applyTheme(t){
+  document.body.className=t;
+  localStorage.setItem("novaTheme",t);
   closeDropdown();
-  sectionTitle.textContent="All Games";
-  build(games);
-}
-
-function showAbout(){
-  closeDropdown();
-  sectionTitle.textContent="About Nova Games";
-
-  grid.innerHTML=`
-  <div class="aboutBox">
-    <h2 style="color:var(--accent);">Nova Games</h2>
-    <p>Nova Games is a lightweight browser game hub built for fast access, smooth performance, and a clean UI.</p>
-    <p>It lets users instantly launch games, track recent activity, and customize themes.</p>
-    <p>GitHub: https://github.com/greyisgreat/Nova</p>
-  </div>`;
-}
-
-function showRecent(){
-  closeDropdown();
-  sectionTitle.textContent="Recent Games";
-
-  if(recentGames.length===0){
-    grid.innerHTML="<div class='aboutBox'>No recent games yet.</div>";
-    return;
-  }
-
-  build(recentGames);
 }
 
 function toggleThemes(){
   themeDropdown.classList.toggle("active");
 }
 
-/* click outside */
+function closeDropdown(){
+  themeDropdown.classList.remove("active");
+}
+
+/* CLOSE EVENTS */
 document.addEventListener("click",(e)=>{
-  if(!e.target.closest('button[onclick="toggleThemes()"]') &&
-     !e.target.closest("#themeDropdown")){
+  if(!e.target.closest("#themeDropdown") &&
+     !e.target.closest(".menuBtn")){
     closeDropdown();
   }
 });
 
-/* scroll */
 window.addEventListener("scroll",closeDropdown);
+window.addEventListener("wheel",closeDropdown);
+window.addEventListener("touchmove",closeDropdown);
 
-function setTheme(t){
-  document.body.classList.remove("nebula","aqua","crimson","lime","gold","velvet");
-  document.body.classList.add(t);
-
-  localStorage.setItem("novaTheme",t);
-  closeDropdown();
-}
-
-let saved=localStorage.getItem("novaTheme");
-if(saved) document.body.classList.add(saved);
+/* LOAD THEME */
+let saved=localStorage.getItem("novaTheme")||"nebula";
+document.body.classList.add(saved);
 
 </script>
 
