@@ -13,9 +13,7 @@
   --bg2:#0b0b1d;
 }
 
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box;}
 
 body{
   margin:0;
@@ -41,7 +39,6 @@ body::after{
 }
 
 /* TOP */
-
 .top{
   padding:24px;
   display:flex;
@@ -74,7 +71,6 @@ body::after{
 }
 
 /* MENU */
-
 .menuWrap{
   display:flex;
   justify-content:center;
@@ -91,7 +87,6 @@ body::after{
   align-items:center;
 
   padding:28px 20px;
-
   border-radius:34px;
 
   background:linear-gradient(90deg,var(--accent),var(--accent2));
@@ -116,9 +111,7 @@ body::after{
   transition:.2s;
 }
 
-.menuBtn:hover{
-  transform:translateY(-3px);
-}
+.menuBtn:hover{transform:translateY(-3px);}
 
 .menuIcon{
   width:28px;
@@ -128,7 +121,6 @@ body::after{
 }
 
 /* CENTER */
-
 .centerOrb{
   position:absolute;
   top:-38px;
@@ -158,12 +150,10 @@ body::after{
 }
 
 /* DROPDOWN */
-
 .themeDropdown{
   position:fixed;
   top:120px;
   right:40px;
-
   width:220px;
 
   border-radius:18px;
@@ -176,7 +166,6 @@ body::after{
   opacity:0;
   transform:translateY(-10px);
   pointer-events:none;
-
   transition:.15s ease;
 
   z-index:99999;
@@ -198,8 +187,7 @@ body::after{
   background:rgba(255,255,255,.08);
 }
 
-/* SECTION */
-
+/* GRID */
 .sectionTitle{
   padding:0 20px;
   margin-bottom:14px;
@@ -207,8 +195,6 @@ body::after{
   font-weight:700;
   color:var(--accent);
 }
-
-/* GRID */
 
 .grid{
   display:grid;
@@ -253,25 +239,7 @@ body::after{
   background:linear-gradient(to top, rgba(0,0,0,.85), transparent);
 }
 
-/* THEMES */
-
-.nebula{--accent:#b46bff;--accent2:#ff4fd8;--bg1:#050510;--bg2:#0b0b1d;}
-.aqua{--accent:#53d8ff;--accent2:#4d7cff;--bg1:#04111a;--bg2:#071d2b;}
-.crimson{--accent:#ff4d6d;--accent2:#ff8c42;--bg1:#14060b;--bg2:#220b14;}
-.lime{--accent:#7dff7d;--accent2:#00ffaa;--bg1:#07140d;--bg2:#0c2118;}
-.gold{--accent:#ffd54d;--accent2:#ff9f43;--bg1:#171005;--bg2:#241605;}
-.velvet{--accent:#d66bff;--accent2:#ff6bd6;--bg1:#120714;--bg2:#1c0b24;}
-
-@media(max-width:1000px){
-  .grid{grid-template-columns:repeat(4,1fr);}
-}
-
-@media(max-width:700px){
-  .grid{grid-template-columns:repeat(2,1fr);}
-}
-
-/* ABOUT BOX */
-
+/* ABOUT */
 .aboutBox{
   grid-column:1/-1;
   padding:22px;
@@ -325,16 +293,13 @@ body::after{
   </div>
 </div>
 
-<!-- DROPDOWN -->
 <div class="themeDropdown" id="themeDropdown">
-
   <div class="themeOption" onclick="setTheme('nebula')">Nebula Drift</div>
   <div class="themeOption" onclick="setTheme('aqua')">Aqua Pulse</div>
   <div class="themeOption" onclick="setTheme('crimson')">Crimson Orbit</div>
   <div class="themeOption" onclick="setTheme('lime')">Lime Reactor</div>
   <div class="themeOption" onclick="setTheme('gold')">Golden Nova</div>
   <div class="themeOption" onclick="setTheme('velvet')">Velvet Void</div>
-
 </div>
 
 <div class="sectionTitle" id="sectionTitle">All Games</div>
@@ -342,25 +307,40 @@ body::after{
 
 <script>
 
-let games = [];
-let icons = {};
+let games=[], icons={};
+const grid=document.getElementById("grid");
+const sectionTitle=document.getElementById("sectionTitle");
+const themeDropdown=document.getElementById("themeDropdown");
 
-const grid = document.getElementById("grid");
-const sectionTitle = document.getElementById("sectionTitle");
-const themeDropdown = document.getElementById("themeDropdown");
-
-let recentGames = JSON.parse(localStorage.getItem("recentGames")) || [];
+let recentGames=JSON.parse(localStorage.getItem("recentGames"))||[];
 
 Promise.all([
-  fetch("games.json").then(r => r.json()),
-  fetch("icons.json").then(r => r.json())
+  fetch("games.json").then(r=>r.json()),
+  fetch("icons.json").then(r=>r.json())
 ]).then(([g,i])=>{
   games=g; icons=i;
   showHome();
 });
 
+/* FIXED NAME SYSTEM (your original logic restored) */
+function cleanName(path){
+  let parts=path.split("/");
+  let name;
+
+  if(parts[parts.length-1]==="index.html"){
+    name=parts[parts.length-2];
+  } else {
+    name=parts[parts.length-1].replace(".html","");
+  }
+
+  return name
+    .replace(/[-_]/g," ")
+    .replace(/\b\w/g,c=>c.toUpperCase());
+}
+
 function build(list){
   grid.innerHTML="";
+
   list.forEach(game=>{
     const t=document.createElement("div");
     t.className="game";
@@ -369,12 +349,12 @@ function build(list){
     const img=document.createElement("img");
     img.src=icons[game]||"";
 
-    const l=document.createElement("div");
-    l.className="label";
-    l.textContent=game.split("/").pop().replace(".html","");
+    const label=document.createElement("div");
+    label.className="label";
+    label.textContent=cleanName(game);
 
     t.appendChild(img);
-    t.appendChild(l);
+    t.appendChild(label);
     grid.appendChild(t);
   });
 }
@@ -399,21 +379,21 @@ function showAbout(){
   <div class="aboutBox">
     <h2 style="color:var(--accent);">Nova Games</h2>
 
-    <p>Nova Games is a lightweight, browser-based game hub designed for fast access to web games with a clean and modern interface. The goal is a smooth, distraction-free launcher where users can instantly play games, track recent activity, and customize themes.</p>
+    <p>Nova Games is a lightweight browser game hub built for fast access, smooth performance, and a clean UI.</p>
 
-    <p>Unlike cluttered game sites, Nova focuses on performance and simplicity. Everything loads quickly and runs directly in the browser.</p>
+    <p>It lets users instantly launch games, track recent activity, and customize the interface with themes.</p>
 
     <h3 style="color:var(--accent);">Features</h3>
     <ul>
       <li>Instant game launching</li>
       <li>Recent game tracking</li>
       <li>Theme system</li>
-      <li>Responsive grid UI</li>
+      <li>Responsive design</li>
     </ul>
 
-    <h3 style="color:var(--accent);">Source</h3>
     <p>
-      [Nova GitHub](https://github.com/greyisgreat/Nova/tree/main?utm_source=chatgpt.com)
+      GitHub:
+      <a href="https://github.com/greyisgreat/Nova">Nova's Github Repo</a>
     </p>
   </div>`;
 }
@@ -433,14 +413,15 @@ function toggleThemes(){
   themeDropdown.classList.toggle("active");
 }
 
-/* CLICK OUTSIDE CLOSE */
+/* close on click outside */
 document.addEventListener("click",(e)=>{
-  const btn=e.target.closest('button[onclick="toggleThemes()"]');
-  const box=e.target.closest("#themeDropdown");
-  if(!btn && !box) themeDropdown.classList.remove("active");
+  if(!e.target.closest('button[onclick="toggleThemes()"]') &&
+     !e.target.closest("#themeDropdown")){
+    themeDropdown.classList.remove("active");
+  }
 });
 
-/* SCROLL CLOSE */
+/* close on scroll */
 window.addEventListener("scroll",()=>{
   themeDropdown.classList.remove("active");
 });
