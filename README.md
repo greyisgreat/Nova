@@ -1,1 +1,1 @@
-Nova is a games site designed by me to imporove on my past styles of gaming sites here are my others such as [Rift](https://rift-math-dashboard.vercel.app/), [Grape](sites.google.com/view/grap3-) and great as my first project [Great](sites.google.com/view/gr8te)
+Nova is a games site designed by me to imporove on my past styles of gaming sites here are my others such as [Rift](https://riftmath-dashboard.vercel.app/), [Grape](sites.google.com/view/grap3-) and great as my first project [Great](sites.google.com/view/gr8te)
