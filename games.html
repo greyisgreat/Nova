@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Nova Games</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: system-ui, Arial;
+  background: #0f0f14;
+  color: #f2f2f7;
+}
+
+.top {
+  padding: 16px;
+  border-bottom: 1px solid rgba(180,107,255,0.2);
+  font-weight: bold;
+  color: #b46bff;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  padding: 16px;
+}
+
+/* GAME TILE */
+.game {
+  height: 140px;
+  border-radius: 14px;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(180,107,255,0.15);
+  transition: 0.2s;
+}
+
+.game:hover {
+  transform: translateY(-3px);
+  border-color: #b46bff;
+}
+
+/* IMAGE FULL COVER */
+.game img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* TITLE OVERLAY */
+.label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 8px;
+  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+  font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="top">✦ Nova Games</div>
+
+<div class="grid">
+
+  <div class="game" onclick="openGame('game1.html')">
+    <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e" />
+    <div class="label">Game 1</div>
+  </div>
+
+  <div class="game" onclick="openGame('game2.html')">
+    <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f" />
+    <div class="label">Game 2</div>
+  </div>
+
+  <div class="game" onclick="openGame('game3.html')">
+    <img src="https://images.unsplash.com/photo-1611996575749-79a3a250f948" />
+    <div class="label">Game 3</div>
+  </div>
+
+</div>
+
+<script>
+function openGame(file) {
+  window.location.href = file;
+}
+</script>
+
+</body>
+</html>
