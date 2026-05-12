@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nova File Launcher</title>
+
+<style>
+  :root {
+    --bg-dark: #0f0f14;
+    --bg-card: #171722;
+    --sidebar-bg: #12121a;
+    --accent: #b46bff;
+    --text-main: #f2f2f7;
+    --text-dim: #a1a1aa;
+    --border: rgba(180,107,255,0.2);
+  }
+
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, Arial, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-main);
+    overflow: hidden;
+  }
+
+  .app {
+    display: flex;
+    height: 100vh;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 260px;
+    background: var(--sidebar-bg);
+    padding: 20px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .logo {
+    color: var(--accent);
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    cursor: pointer;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    transition: 0.2s;
+    color: var(--text-dim);
+  }
+
+  .nav-item:hover {
+    background: rgba(180,107,255,0.1);
+    color: var(--text-main);
+  }
+
+  .nav-item.active {
+    background: rgba(180,107,255,0.15);
+    color: var(--accent);
+  }
+
+  .icon-box {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    background: var(--accent);
+    color: white;
+    font-weight: bold;
+  }
+
+  /* MAIN CONTENT */
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    gap: 20px;
+    overflow-y: auto;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* DROP ZONE */
+  .drop-zone {
+    border: 2px dashed var(--border);
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    background: var(--bg-card);
+    transition: 0.3s;
+    cursor: pointer;
+  }
+
+  .drop-zone.drag-over {
+    border-color: var(--accent);
+    background: rgba(180,107,255,0.05);
+  }
+
+  /* TEXT AREA INPUT */
+  .input-area {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    flex: 1;
+  }
+
+  textarea {
+    width: 100%;
+    height: 200px;
+    background: #0a0a0f;
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 10px;
+    color: #00ffaa;
+    font-family: 'Courier New', monospace;
+    padding: 15px;
+    resize: none;
+    outline: none;
+    box-sizing: border-box;
+  }
+
+  .btn-launch {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    align-self: flex-end;
+    transition: 0.2s;
+  }
+
+  .btn-launch:hover {
+    filter: brightness(1.2);
+    transform: translateY(-2px);
+  }
+
+  /* HIDDEN INPUT */
+  #file-input { display: none; }
+
+  h1 { margin: 0; font-size: 1.5rem; }
+  p { color: var(--text-dim); margin-top: 5px; }
+
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="sidebar">
+    <div class="logo">✦ Nova File Launcher</div>
+    
+    <div class="nav-item active">
+      <div class="icon-box">L</div> Launcher
+    </div>
+    <div class="nav-item">
+      <div class="icon-box" style="background: #ec4899;">H</div> History
+    </div>
+    <div class="nav-item">
+      <div class="icon-box" style="background: #f97316;">S</div> Settings
+    </div>
+  </div>
+
+  <div class="main">
+    <header>
+      <div>
+        <h1>Welcome, User</h1>
+        <p>Upload a file or paste code to launch a preview.</p>
+      </div>
+    </header>
+
+    <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+      <div style="font-size: 40px; margin-bottom: 10px;">✦</div>
+      <p><strong>Drag & Drop</strong> your HTML/JS file here</p>
+      <p style="font-size: 0.8rem;">or click to browse your computer</p>
+      <input type="file" id="file-input" accept=".html,.txt,.js">
+    </div>
+
+    <div class="input-area">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-weight: bold; color: var(--accent);">Direct Input</span>
+        <span style="font-size: 0.8rem; color: var(--text-dim);">Paste your code below</span>
+      </div>
+      <textarea id="code-input" placeholder="<html>
+  <body>
+    <h1>Hello Nova!</h1>
+  </body>
+</html>"></textarea>
+      <button class="btn-launch" onclick="launchCode()">Launch Preview</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const dropZone = document.getElementById('drop-zone');
+  const fileInput = document.getElementById('file-input');
+  const codeInput = document.getElementById('code-input');
+
+  // Handle Drag & Drop styles
+  ['dragenter', 'dragover'].forEach(name => {
+    dropZone.addEventListener(name, (e) => {
+      e.preventDefault();
+      dropZone.classList.add('drag-over');
+    });
+  });
+
+  ['dragleave', 'drop'].forEach(name => {
+    dropZone.addEventListener(name, (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('drag-over');
+    });
+  });
+
+  // Handle File Drop
+  dropZone.addEventListener('drop', (e) => {
+    const file = e.dataTransfer.files[0];
+    handleFile(file);
+  });
+
+  // Handle File Selection via click
+  fileInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    handleFile(file);
+  });
+
+  function handleFile(file) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const content = e.target.result;
+      openPreview(content);
+    };
+    reader.readAsText(file);
+  }
+
+  function launchCode() {
+    const content = codeInput.value;
+    if (!content.trim()) {
+      alert("Please paste some code first!");
+      return;
+    }
+    openPreview(content);
+  }
+
+  function openPreview(content) {
+    const win = window.open();
+    win.document.write(content);
+    win.document.close();
+  }
+</script>
+
+</body>
+</html>
