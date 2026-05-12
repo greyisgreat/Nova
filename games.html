@@ -40,17 +40,17 @@ body::after {
   border-bottom: 1px solid rgba(180,107,255,0.25);
 }
 
-/* GRID */
+/* ===== GRID (5 PER ROW) ===== */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(5, 1fr);
   gap: 14px;
   padding: 16px;
 }
 
-/* GAME TILE */
+/* ===== SQUARE TILE ===== */
 .game {
-  height: 140px;
+  aspect-ratio: 1 / 1;
   border-radius: 14px;
   overflow: hidden;
   cursor: pointer;
@@ -82,6 +82,7 @@ body::after {
   padding: 8px;
   background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
   font-weight: bold;
+  font-size: 13px;
 }
 </style>
 </head>
@@ -125,7 +126,6 @@ function build() {
 
     const tile = document.createElement("div");
     tile.className = "game";
-
     tile.onclick = () => window.location.href = game;
 
     const img = document.createElement("img");
