@@ -91,7 +91,6 @@ body::after{
 
   background:linear-gradient(90deg,var(--accent),var(--accent2));
   box-shadow:0 14px 40px rgba(0,0,0,.45);
-
   overflow:visible;
 }
 
@@ -254,7 +253,7 @@ body::after{
 </style>
 </head>
 
-<body class="nebula">
+<body>
 
 <div class="top">
   <div class="brand">
@@ -293,6 +292,7 @@ body::after{
   </div>
 </div>
 
+<!-- DROPDOWN -->
 <div class="themeDropdown" id="themeDropdown">
   <div class="themeOption" onclick="setTheme('nebula')">Nebula Drift</div>
   <div class="themeOption" onclick="setTheme('aqua')">Aqua Pulse</div>
@@ -308,11 +308,16 @@ body::after{
 <script>
 
 let games=[], icons={};
+
 const grid=document.getElementById("grid");
 const sectionTitle=document.getElementById("sectionTitle");
 const themeDropdown=document.getElementById("themeDropdown");
 
 let recentGames=JSON.parse(localStorage.getItem("recentGames"))||[];
+
+function closeDropdown(){
+  themeDropdown.classList.remove("active");
+}
 
 Promise.all([
   fetch("games.json").then(r=>r.json()),
@@ -322,7 +327,7 @@ Promise.all([
   showHome();
 });
 
-/* FIXED NAME SYSTEM (your original logic restored) */
+/* NAME FIX */
 function cleanName(path){
   let parts=path.split("/");
   let name;
@@ -333,14 +338,11 @@ function cleanName(path){
     name=parts[parts.length-1].replace(".html","");
   }
 
-  return name
-    .replace(/[-_]/g," ")
-    .replace(/\b\w/g,c=>c.toUpperCase());
+  return name.replace(/[-_]/g," ").replace(/\b\w/g,c=>c.toUpperCase());
 }
 
 function build(list){
   grid.innerHTML="";
-
   list.forEach(game=>{
     const t=document.createElement("div");
     t.className="game";
@@ -368,37 +370,26 @@ function launch(game){
 }
 
 function showHome(){
+  closeDropdown();
   sectionTitle.textContent="All Games";
   build(games);
 }
 
 function showAbout(){
+  closeDropdown();
   sectionTitle.textContent="About Nova Games";
 
   grid.innerHTML=`
   <div class="aboutBox">
     <h2 style="color:var(--accent);">Nova Games</h2>
-
     <p>Nova Games is a lightweight browser game hub built for fast access, smooth performance, and a clean UI.</p>
-
-    <p>It lets users instantly launch games, track recent activity, and customize the interface with themes.</p>
-
-    <h3 style="color:var(--accent);">Features</h3>
-    <ul>
-      <li>Instant game launching</li>
-      <li>Recent game tracking</li>
-      <li>Theme system</li>
-      <li>Responsive design</li>
-    </ul>
-
-    <p>
-      GitHub:
-      <a href="https://github.com/greyisgreat/Nova">Nova's Github Repo</a>
-    </p>
+    <p>It lets users instantly launch games, track recent activity, and customize themes.</p>
+    <p>GitHub: https://github.com/greyisgreat/Nova</p>
   </div>`;
 }
 
 function showRecent(){
+  closeDropdown();
   sectionTitle.textContent="Recent Games";
 
   if(recentGames.length===0){
@@ -413,27 +404,27 @@ function toggleThemes(){
   themeDropdown.classList.toggle("active");
 }
 
-/* close on click outside */
+/* click outside */
 document.addEventListener("click",(e)=>{
   if(!e.target.closest('button[onclick="toggleThemes()"]') &&
      !e.target.closest("#themeDropdown")){
-    themeDropdown.classList.remove("active");
+    closeDropdown();
   }
 });
 
-/* close on scroll */
-window.addEventListener("scroll",()=>{
-  themeDropdown.classList.remove("active");
-});
+/* scroll */
+window.addEventListener("scroll",closeDropdown);
 
 function setTheme(t){
-  document.body.className=t;
+  document.body.classList.remove("nebula","aqua","crimson","lime","gold","velvet");
+  document.body.classList.add(t);
+
   localStorage.setItem("novaTheme",t);
-  themeDropdown.classList.remove("active");
+  closeDropdown();
 }
 
 let saved=localStorage.getItem("novaTheme");
-if(saved) document.body.className=saved;
+if(saved) document.body.classList.add(saved);
 
 </script>
 
