@@ -58,16 +58,12 @@ body::after{
   width:46px;
   height:46px;
   border-radius:14px;
-
   display:flex;
   align-items:center;
   justify-content:center;
-
   font-size:24px;
   font-weight:bold;
-
   background:linear-gradient(135deg,var(--accent),var(--accent2));
-
   box-shadow:0 0 20px rgba(180,107,255,.4);
 }
 
@@ -88,7 +84,6 @@ body::after{
 .menu{
   width:820px;
   max-width:92%;
-
   position:relative;
 
   display:flex;
@@ -100,17 +95,16 @@ body::after{
   border-radius:34px;
 
   background:linear-gradient(90deg,var(--accent),var(--accent2));
-
   box-shadow:0 14px 40px rgba(0,0,0,.45);
+
+  overflow:visible;
 }
 
 .menuBtn{
   border:none;
   background:none;
   color:white;
-
   cursor:pointer;
-
   font-size:15px;
   font-weight:700;
 
@@ -129,76 +123,69 @@ body::after{
 .menuIcon{
   width:28px;
   height:28px;
-
   border-radius:50%;
-
   border:2px solid rgba(255,255,255,.8);
 }
 
-/* CENTER ORB */
+/* CENTER */
 
 .centerOrb{
   position:absolute;
   top:-38px;
   left:50%;
   transform:translateX(-50%);
-
   width:110px;
   height:110px;
-
   border-radius:50%;
-
   display:flex;
   align-items:center;
   justify-content:center;
-
   background:linear-gradient(135deg,var(--accent),var(--accent2));
-
   border:7px solid #090914;
-
   box-shadow:0 0 35px rgba(180,107,255,.5);
 }
 
 .centerInner{
   width:82px;
   height:82px;
-
   border-radius:50%;
-
   display:flex;
   align-items:center;
   justify-content:center;
-
   background:rgba(255,255,255,.12);
-
   font-size:34px;
   font-weight:bold;
 }
 
-/* THEMES */
+/* DROPDOWN */
 
 .themeDropdown{
-  position:absolute;
-  top:115px;
-  right:12px;
+  position:fixed;
+  top:120px;
+  right:40px;
 
   width:220px;
 
   border-radius:18px;
-
   overflow:hidden;
 
   background:rgba(15,15,30,.95);
-
   backdrop-filter:blur(10px);
-
   border:1px solid rgba(255,255,255,.08);
 
-  display:none;
+  opacity:0;
+  transform:translateY(-10px);
+  pointer-events:none;
+
+  transition:.15s ease;
+
+  z-index:99999;
 }
 
 .themeDropdown.active{
-  display:block;
+  opacity:1;
+  transform:translateY(0);
+  pointer-events:auto;
 }
 
 .themeOption{
@@ -216,10 +203,8 @@ body::after{
 .sectionTitle{
   padding:0 20px;
   margin-bottom:14px;
-
   font-size:22px;
   font-weight:700;
-
   color:var(--accent);
 }
 
@@ -232,22 +217,17 @@ body::after{
   padding:0 20px 30px;
 }
 
-/* TILE */
-
 .game{
   aspect-ratio:1/1;
-
   border-radius:18px;
   overflow:hidden;
-
   cursor:pointer;
-  position:relative;
 
   background:rgba(20,20,35,.4);
-
   border:1px solid rgba(255,255,255,.08);
 
   transition:.2s;
+  position:relative;
 }
 
 .game:hover{
@@ -267,81 +247,40 @@ body::after{
   left:0;
   right:0;
   bottom:0;
-
   padding:10px;
-
   font-size:13px;
   font-weight:700;
-
   background:linear-gradient(to top, rgba(0,0,0,.85), transparent);
 }
 
 /* THEMES */
 
-.nebula{
-  --accent:#b46bff;
-  --accent2:#ff4fd8;
-  --bg1:#050510;
-  --bg2:#0b0b1d;
-}
-
-.aqua{
-  --accent:#53d8ff;
-  --accent2:#4d7cff;
-  --bg1:#04111a;
-  --bg2:#071d2b;
-}
-
-.crimson{
-  --accent:#ff4d6d;
-  --accent2:#ff8c42;
-  --bg1:#14060b;
-  --bg2:#220b14;
-}
-
-.lime{
-  --accent:#7dff7d;
-  --accent2:#00ffaa;
-  --bg1:#07140d;
-  --bg2:#0c2118;
-}
-
-.gold{
-  --accent:#ffd54d;
-  --accent2:#ff9f43;
-  --bg1:#171005;
-  --bg2:#241605;
-}
-
-.velvet{
-  --accent:#d66bff;
-  --accent2:#ff6bd6;
-  --bg1:#120714;
-  --bg2:#1c0b24;
-}
+.nebula{--accent:#b46bff;--accent2:#ff4fd8;--bg1:#050510;--bg2:#0b0b1d;}
+.aqua{--accent:#53d8ff;--accent2:#4d7cff;--bg1:#04111a;--bg2:#071d2b;}
+.crimson{--accent:#ff4d6d;--accent2:#ff8c42;--bg1:#14060b;--bg2:#220b14;}
+.lime{--accent:#7dff7d;--accent2:#00ffaa;--bg1:#07140d;--bg2:#0c2118;}
+.gold{--accent:#ffd54d;--accent2:#ff9f43;--bg1:#171005;--bg2:#241605;}
+.velvet{--accent:#d66bff;--accent2:#ff6bd6;--bg1:#120714;--bg2:#1c0b24;}
 
 @media(max-width:1000px){
-  .grid{
-    grid-template-columns:repeat(4,1fr);
-  }
+  .grid{grid-template-columns:repeat(4,1fr);}
 }
 
 @media(max-width:700px){
+  .grid{grid-template-columns:repeat(2,1fr);}
+}
 
-  .grid{
-    grid-template-columns:repeat(2,1fr);
-  }
+/* ABOUT BOX */
 
-  .centerOrb{
-    width:92px;
-    height:92px;
-  }
-
-  .centerInner{
-    width:66px;
-    height:66px;
-    font-size:28px;
-  }
+.aboutBox{
+  grid-column:1/-1;
+  padding:22px;
+  max-width:900px;
+  margin:0 auto;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:18px;
+  line-height:1.7;
 }
 
 </style>
@@ -350,16 +289,13 @@ body::after{
 <body class="nebula">
 
 <div class="top">
-
   <div class="brand">
     <div class="logo">✦</div>
     <div class="title">Nova Games</div>
   </div>
-
 </div>
 
 <div class="menuWrap">
-
   <div class="menu">
 
     <button class="menuBtn" onclick="showHome()">
@@ -367,9 +303,9 @@ body::after{
       Home
     </button>
 
-    <button class="menuBtn" onclick="showTrending()">
+    <button class="menuBtn" onclick="showAbout()">
       <div class="menuIcon"></div>
-      Trending
+      About
     </button>
 
     <div class="centerOrb">
@@ -386,23 +322,22 @@ body::after{
       Themes
     </button>
 
-    <div class="themeDropdown" id="themeDropdown">
-
-      <div class="themeOption" onclick="setTheme('nebula')">Nebula Drift</div>
-      <div class="themeOption" onclick="setTheme('aqua')">Aqua Pulse</div>
-      <div class="themeOption" onclick="setTheme('crimson')">Crimson Orbit</div>
-      <div class="themeOption" onclick="setTheme('lime')">Lime Reactor</div>
-      <div class="themeOption" onclick="setTheme('gold')">Golden Nova</div>
-      <div class="themeOption" onclick="setTheme('velvet')">Velvet Void</div>
-
-    </div>
-
   </div>
+</div>
+
+<!-- DROPDOWN -->
+<div class="themeDropdown" id="themeDropdown">
+
+  <div class="themeOption" onclick="setTheme('nebula')">Nebula Drift</div>
+  <div class="themeOption" onclick="setTheme('aqua')">Aqua Pulse</div>
+  <div class="themeOption" onclick="setTheme('crimson')">Crimson Orbit</div>
+  <div class="themeOption" onclick="setTheme('lime')">Lime Reactor</div>
+  <div class="themeOption" onclick="setTheme('gold')">Golden Nova</div>
+  <div class="themeOption" onclick="setTheme('velvet')">Velvet Void</div>
 
 </div>
 
 <div class="sectionTitle" id="sectionTitle">All Games</div>
-
 <div class="grid" id="grid"></div>
 
 <script>
@@ -416,99 +351,78 @@ const themeDropdown = document.getElementById("themeDropdown");
 
 let recentGames = JSON.parse(localStorage.getItem("recentGames")) || [];
 
-const trendingGames = [
-  "games/Basket Random.html",
-  "games/Soccer Random.html",
-  "games/Volley Random.html"
-];
-
 Promise.all([
   fetch("games.json").then(r => r.json()),
   fetch("icons.json").then(r => r.json())
-])
-.then(([g, i]) => {
-
-  games = g;
-  icons = i;
-
+]).then(([g,i])=>{
+  games=g; icons=i;
   showHome();
 });
 
-function cleanName(path){
-
-  let parts = path.split("/");
-
-  let name;
-
-  if(parts[parts.length - 1] === "index.html"){
-    name = parts[parts.length - 2];
-  } else {
-    name = parts[parts.length - 1].replace(".html", "");
-  }
-
-  return name
-    .replace(/[-_]/g, " ")
-    .replace(/\b\w/g, c => c.toUpperCase());
-}
-
 function build(list){
+  grid.innerHTML="";
+  list.forEach(game=>{
+    const t=document.createElement("div");
+    t.className="game";
+    t.onclick=()=>launch(game);
 
-  grid.innerHTML = "";
+    const img=document.createElement("img");
+    img.src=icons[game]||"";
 
-  list.forEach(game => {
+    const l=document.createElement("div");
+    l.className="label";
+    l.textContent=game.split("/").pop().replace(".html","");
 
-    const tile = document.createElement("div");
-
-    tile.className = "game";
-
-    tile.onclick = () => launch(game);
-
-    const img = document.createElement("img");
-
-    img.src = icons[game] || "";
-
-    const label = document.createElement("div");
-
-    label.className = "label";
-
-    label.textContent = cleanName(game);
-
-    tile.appendChild(img);
-    tile.appendChild(label);
-
-    grid.appendChild(tile);
+    t.appendChild(img);
+    t.appendChild(l);
+    grid.appendChild(t);
   });
 }
 
 function launch(game){
-
-  recentGames = recentGames.filter(g => g !== game);
-
+  recentGames=recentGames.filter(g=>g!==game);
   recentGames.unshift(game);
-
-  recentGames = recentGames.slice(0,10);
-
-  localStorage.setItem("recentGames", JSON.stringify(recentGames));
-
-  window.location.href = game;
+  recentGames=recentGames.slice(0,10);
+  localStorage.setItem("recentGames",JSON.stringify(recentGames));
+  window.location.href=game;
 }
 
 function showHome(){
-  sectionTitle.textContent = "All Games";
+  sectionTitle.textContent="All Games";
   build(games);
 }
 
-function showTrending(){
-  sectionTitle.textContent = "Trending Games";
-  build(trendingGames);
+function showAbout(){
+  sectionTitle.textContent="About Nova Games";
+
+  grid.innerHTML=`
+  <div class="aboutBox">
+    <h2 style="color:var(--accent);">Nova Games</h2>
+
+    <p>Nova Games is a lightweight, browser-based game hub designed for fast access to web games with a clean and modern interface. The goal is a smooth, distraction-free launcher where users can instantly play games, track recent activity, and customize themes.</p>
+
+    <p>Unlike cluttered game sites, Nova focuses on performance and simplicity. Everything loads quickly and runs directly in the browser.</p>
+
+    <h3 style="color:var(--accent);">Features</h3>
+    <ul>
+      <li>Instant game launching</li>
+      <li>Recent game tracking</li>
+      <li>Theme system</li>
+      <li>Responsive grid UI</li>
+    </ul>
+
+    <h3 style="color:var(--accent);">Source</h3>
+    <p>
+      [Nova GitHub](https://github.com/greyisgreat/Nova/tree/main?utm_source=chatgpt.com)
+    </p>
+  </div>`;
 }
 
 function showRecent(){
+  sectionTitle.textContent="Recent Games";
 
-  sectionTitle.textContent = "Recent Games";
-
-  if(recentGames.length === 0){
-    grid.innerHTML = "";
+  if(recentGames.length===0){
+    grid.innerHTML="<div class='aboutBox'>No recent games yet.</div>";
     return;
   }
 
@@ -519,20 +433,26 @@ function toggleThemes(){
   themeDropdown.classList.toggle("active");
 }
 
-function setTheme(theme){
+/* CLICK OUTSIDE CLOSE */
+document.addEventListener("click",(e)=>{
+  const btn=e.target.closest('button[onclick="toggleThemes()"]');
+  const box=e.target.closest("#themeDropdown");
+  if(!btn && !box) themeDropdown.classList.remove("active");
+});
 
-  document.body.className = theme;
+/* SCROLL CLOSE */
+window.addEventListener("scroll",()=>{
+  themeDropdown.classList.remove("active");
+});
 
-  localStorage.setItem("novaTheme", theme);
-
+function setTheme(t){
+  document.body.className=t;
+  localStorage.setItem("novaTheme",t);
   themeDropdown.classList.remove("active");
 }
 
-const savedTheme = localStorage.getItem("novaTheme");
-
-if(savedTheme){
-  document.body.className = savedTheme;
-}
+let saved=localStorage.getItem("novaTheme");
+if(saved) document.body.className=saved;
 
 </script>
 
