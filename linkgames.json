@@ -1,10 +1,16 @@
-
 {
   "games": [
     {
       "name": "Arcane Archer",
-      "link": "https://macvg-games.github.io/action-games/arcane-archer/",
-      "thumb": "games-icons/arcane.png"
+      "link": "https://macvg-games.github.io/action-games/arcane-archer/"
+    }
+  ]
+},
+{
+  "games": [
+    {
+      "name": "Basket Random",
+      "link": "https://macvg-games.github.io/driving-games/basket-random"
     }
   ]
 }
