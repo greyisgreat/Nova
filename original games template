@@ -276,52 +276,49 @@
 			text-align: center;
 		}
 
-		.nebula {
-			--accent: #b46bff;
-			--accent2: #ff4fd8;
-			--bg1: #050510;
-			--bg2: #0b0b1d;
+		/* Launcher specific styles */
+		.launcher-layout {
+			display: flex;
+			justify-content: center;
+			gap: 20px;
+			padding: 20px;
+			max-width: 1400px;
+			margin: 0 auto;
 		}
 
-		.aqua {
-			--accent: #53d8ff;
-			--accent2: #4d7cff;
-			--bg1: #04111a;
-			--bg2: #071d2b;
+		.side-column { display: flex; flex-direction: column; gap: 15px; width: 180px; }
+		.side-card {
+			width: 100%; aspect-ratio: 1; border-radius: 12px; overflow: hidden;
+			cursor: pointer; border: 1px solid rgba(255,255,255,0.1); transition: 0.2s;
 		}
+		.side-card:hover { transform: scale(1.05); border-color: var(--accent); }
+		.side-card img { width: 100%; height: 100%; object-fit: cover; }
 
-		.crimson {
-			--accent: #ff4d6d;
-			--accent2: #ff8c42;
-			--bg1: #14060b;
-			--bg2: #220b14;
-		}
+		.main-stage { flex: 1; max-width: 900px; }
+		.iframe-wrapper { background: #000; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+		#gameFrame { width: 100%; height: 550px; border: none; display: block; }
 
-		.lime {
-			--accent: #7dff7d;
-			--accent2: #00ffaa;
-			--bg1: #07140d;
-			--bg2: #0c2118;
+		.control-bar {
+			background: white; height: 54px; display: flex;
+			align-items: center; justify-content: space-between;
+			padding: 0 20px; color: #111;
 		}
+		.bar-left { display: flex; align-items: center; gap: 12px; }
+		.bar-left img { width: 32px; height: 32px; border-radius: 6px; }
+		.bar-left span { font-weight: 800; font-size: 16px; }
+		.fs-btn { background: #eee; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; }
 
-		.gold {
-			--accent: #ffd54d;
-			--accent2: #ff9f43;
-			--bg1: #171005;
-			--bg2: #241605;
-		}
-
-		.velvet {
-			--accent: #d66bff;
-			--accent2: #ff6bd6;
-			--bg1: #120714;
-			--bg2: #1c0b24;
-		}
+		/* ALL THEMES RESTORED */
+		.nebula { --accent: #b46bff; --accent2: #ff4fd8; --bg1: #050510; --bg2: #0b0b1d; }
+		.aqua { --accent: #53d8ff; --accent2: #4d7cff; --bg1: #04111a; --bg2: #071d2b; }
+		.crimson { --accent: #ff4d6d; --accent2: #ff8c42; --bg1: #14060b; --bg2: #220b14; }
+		.lime { --accent: #7dff7d; --accent2: #00ffaa; --bg1: #07140d; --bg2: #0c2118; }
+		.gold { --accent: #ffd54d; --accent2: #ff9f43; --bg1: #171005; --bg2: #241605; }
+		.velvet { --accent: #d66bff; --accent2: #ff6bd6; --bg1: #120714; --bg2: #1c0b24; }
 
 		@media (max-width: 800px) {
-			.grid {
-				grid-template-columns: repeat(3, 1fr);
-			}
+			.grid { grid-template-columns: repeat(3, 1fr); }
+			.side-column { display: none; }
 		}
 	</style>
 </head>
@@ -334,178 +331,195 @@
 			<div class="title">Nova Games</div>
 		</div>
 		<input class="searchBar" placeholder="Search games..." oninput="filterGames(this.value)">
-</div>
+	</div>
 
-		<div class="menuWrap">
-			<div class="menu">
-				<button class="menuBtn" onclick="showView('home')">Home</button>
-				<button class="menuBtn" onclick="showView('about')">About</button>
-				<div class="centerOrb">
-					<div class="centerInner">✦</div>
+	<div class="menuWrap">
+		<div class="menu">
+			<button class="menuBtn" onclick="showView('home')">Home</button>
+			<button class="menuBtn" onclick="showView('about')">About</button>
+			<div class="centerOrb">
+				<div class="centerInner">✦</div>
+			</div>
+			<button class="menuBtn" onclick="showView('recent')">Recent</button>
+			<button class="menuBtn" onclick="toggleThemes()">Themes</button>
+		</div>
+	</div>
+
+	<div class="themeDropdown" id="themeDropdown">
+		<div class="themeOption" onclick="applyTheme('nebula')">Nebula Drift</div>
+		<div class="themeOption" onclick="applyTheme('aqua')">Aqua Pulse</div>
+		<div class="themeOption" onclick="applyTheme('crimson')">Crimson Orbit</div>
+		<div class="themeOption" onclick="applyTheme('lime')">Lime Reactor</div>
+		<div class="themeOption" onclick="applyTheme('gold')">Golden Nova</div>
+		<div class="themeOption" onclick="applyTheme('velvet')">Velvet Void</div>
+	</div>
+
+	<div class="sectionTitle" id="sectionTitle">All Games</div>
+
+	<!-- HOME VIEW -->
+	<div id="home" class="view active">
+		<div class="grid" id="grid"></div>
+	</div>
+
+	<!-- GAME LAUNCHER VIEW -->
+	<div id="gameView" class="view">
+		<div class="launcher-layout">
+			<div class="side-column" id="side-left"></div>
+			<div class="main-stage">
+				<div class="iframe-wrapper">
+					<iframe id="gameFrame" src="" allowfullscreen></iframe>
+					<div class="control-bar">
+						<div class="bar-left">
+							<img id="barIcon" src="" alt="">
+							<span id="barName"></span>
+						</div>
+						<div class="bar-right">
+							<button class="fs-btn" onclick="toggleFS()">⛶ Fullscreen</button>
+						</div>
+					</div>
 				</div>
-				<button class="menuBtn" onclick="showView('recent')">Recent</button>
-				<button class="menuBtn" onclick="toggleThemes()">Themes</button>
+			</div>
+			<div class="side-column" id="side-right"></div>
+		</div>
+	</div>
+
+	<!-- ABOUT VIEW -->
+	<div id="about" class="view">
+		<div class="grid">
+			<div class="aboutBox">
+				<h2 style="color:var(--accent); font-size: 32px;">About Nova</h2>
+				<p style="font-size: 18px; line-height: 1.6;">Nova is a high-performance browser-based launcher.</p>
+				<p>Managed via decentralized JSON files for instant updates.</p>
+				<br>
+				<p><b>GitHub:</b> <a href="https://github.com/greyisgreat/Nova/"
+						style="color: var(--accent2);">Click Here</a></p>
 			</div>
 		</div>
+	</div>
 
-		<div class="themeDropdown" id="themeDropdown">
-			<div class="themeOption" onclick="applyTheme('nebula')">Nebula Drift</div>
-			<div class="themeOption" onclick="applyTheme('aqua')">Aqua Pulse</div>
-			<div class="themeOption" onclick="applyTheme('crimson')">Crimson Orbit</div>
-			<div class="themeOption" onclick="applyTheme('lime')">Lime Reactor</div>
-			<div class="themeOption" onclick="applyTheme('gold')">Golden Nova</div>
-			<div class="themeOption" onclick="applyTheme('velvet')">Velvet Void</div>
-		</div>
+	<!-- RECENT VIEW -->
+	<div id="recent" class="view">
+		<div class="grid" id="recentGrid"></div>
+	</div>
 
-		<div class="sectionTitle" id="sectionTitle">All Games</div>
+	<script>
+		let allGames = [];
+		let recentGames = JSON.parse(localStorage.getItem("recentGames")) || [];
 
-		<div id="home" class="view active">
-			<div class="grid" id="grid"></div>
-		</div>
+		const grid = document.getElementById("grid");
+		const recentGrid = document.getElementById("recentGrid");
+		const sectionTitle = document.getElementById("sectionTitle");
+		const themeDropdown = document.getElementById("themeDropdown");
 
-		<div id="about" class="view">
-			<div class="grid">
-				<div class="aboutBox">
-					<h2 style="color:var(--accent); font-size: 32px;">About Nova</h2>
-					<p style="font-size: 18px; line-height: 1.6;">Nova is a high-performance browser-based launcher.</p>
-					<p>Managed via decentralized JSON files for instant updates.</p>
-					<br>
-					<p><b>GitHub:</b> <a href="https://github.com/greyisgreat/Nova/"
-							style="color: var(--accent2);">Click Here</a></p>
-				</div>
-			</div>
-		</div>
+		const views = {
+			home: document.getElementById("home"),
+			about: document.getElementById("about"),
+			recent: document.getElementById("recent"),
+			gameView: document.getElementById("gameView")
+		};
 
-		<div id="recent" class="view">
-			<div class="grid" id="recentGrid"></div>
-		</div>
+		async function initApp() {
+			try {
+				const [localList, localIcons, externalData, linkIcons] = await Promise.all([
+					fetch("games.json").then(r => r.json()).catch(() => []),
+					fetch("icons.json").then(r => r.json()).catch(() => ({})),
+					fetch("linkgames.json").then(r => r.json()).catch(() => ({ games: [] })),
+					fetch("link-icons.json").then(r => r.json()).catch(() => ({}))
+				]);
+				
+				const localFormatted = localList.map(path => ({
+					name: cleanName(path),
+					link: path,
+					img: localIcons[path] || ""
+				}));
 
-		<script>
-			let allGames = [];
-let recentGames = JSON.parse(localStorage.getItem("recentGames")) || [];
+				const externalFormatted = (externalData.games || []).map(g => ({
+					name: g.name,
+					link: g.link,
+					img: linkIcons[g.link] || "" 
+				}));
 
-const grid = document.getElementById("grid");
-const recentGrid = document.getElementById("recentGrid");
-const sectionTitle = document.getElementById("sectionTitle");
-const themeDropdown = document.getElementById("themeDropdown");
+				allGames = [...localFormatted, ...externalFormatted];
+				render(allGames, grid);
+			} catch(e) { console.error(e); }
+		}
 
-const views = {
-    home: document.getElementById("home"),
-    about: document.getElementById("about"),
-    recent: document.getElementById("recent")
-};
+		function cleanName(path) {
+			let parts = path.split("/");
+			let name = (parts.at(-1) === "index.html") ? parts.at(-2) : parts.at(-1).replace(".html", "");
+			return name ? name.replace(/[-_]/g, " ").replace(/\b\w/g, c => c.toUpperCase()) : "Unknown Game";
+		}
 
-async function initApp() {
-    let localFormatted = [];
-    let externalFormatted = [];
+		function render(list, container) {
+			container.innerHTML = "";
+			list.forEach(game => {
+				const d = document.createElement("div");
+				d.className = "game";
+				d.onclick = () => launch(game);
+				d.innerHTML = `<img src="${game.img}" onerror="this.src='https://via.placeholder.com/150?text=${game.name}'"><div class="label">${game.name}</div>`;
+				container.appendChild(d);
+			});
+		}
 
-    try {
-        const [localList, localIcons, externalData, linkIcons] = await Promise.all([
-            fetch("games.json").then(r => r.json()).catch(() => []),
-            fetch("icons.json").then(r => r.json()).catch(() => ({})),
-            fetch("linkgames.json").then(r => r.json()).catch(() => ({ games: [] })),
-            fetch("link-icons.json").then(r => r.json()).catch(() => ({}))
-        ]);
-        
-        // 1. Process Local
-        localFormatted = localList.map(path => ({
-            name: cleanName(path),
-            link: path,
-            img: localIcons[path] || ""
-        }));
+		function launch(game) {
+			recentGames = recentGames.filter(g => g.link !== game.link);
+			recentGames.unshift(game);
+			recentGames = recentGames.slice(0, 10);
+			localStorage.setItem("recentGames", JSON.stringify(recentGames));
 
-        // 2. Process External
-        if (externalData.games) {
-            externalFormatted = externalData.games.map(g => ({
-                name: g.name,
-                link: g.link,
-                img: linkIcons[g.link] || "" 
-            }));
-        }
+			showView('gameView');
+			document.getElementById('gameFrame').src = game.link;
+			document.getElementById('barName').textContent = game.name;
+			document.getElementById('barIcon').src = game.img;
 
-        allGames = [...localFormatted, ...externalFormatted];
-        render(allGames, grid);
-    } catch(e) { 
-        console.error("Initialization Error:", e); 
-    }
-}
+			const shuffled = [...allGames].sort(() => 0.5 - Math.random());
+			const randoms = shuffled.slice(0, 4);
+			
+			const left = document.getElementById('side-left');
+			const right = document.getElementById('side-right');
+			left.innerHTML = ''; right.innerHTML = '';
+			randoms.forEach((g, i) => {
+				const card = document.createElement('div');
+				card.className = 'side-card';
+				card.onclick = () => launch(g);
+				card.innerHTML = `<img src="${g.img}" onerror="this.src='https://via.placeholder.com/150?text=${g.name}'">`;
+				(i < 2) ? left.appendChild(card) : right.appendChild(card);
+			});
+		}
 
-function cleanName(path) {
-    let parts = path.split("/");
-    let name = (parts.at(-1) === "index.html") ? parts.at(-2) : parts.at(-1).replace(".html", "");
-    if(!name) return "Unknown Game";
-    return name.replace(/[-_]/g, " ").replace(/\b\w/g, c => c.toUpperCase());
-}
+		function showView(v) {
+			Object.values(views).forEach(x => x.classList.remove("active"));
+			views[v].classList.add("active");
+			sectionTitle.style.display = (v === 'gameView') ? 'none' : 'block';
+			
+			if (v === "recent") { render(recentGames, recentGrid); sectionTitle.textContent = "Recent Games"; }
+			else if (v === "home") { sectionTitle.textContent = "All Games"; document.getElementById('gameFrame').src = ""; }
+			else if (v === "about") { sectionTitle.textContent = "About Nova"; }
+		}
 
-function render(list, container) {
-    container.innerHTML = "";
-    list.forEach(game => {
-        const d = document.createElement("div");
-        d.className = "game";
-        d.onclick = () => launch(game);
+		function toggleFS() {
+			const f = document.getElementById('gameFrame');
+			if (f.requestFullscreen) f.requestFullscreen();
+			else if (f.webkitRequestFullscreen) f.webkitRequestFullscreen();
+		}
 
-        const img = document.createElement("img");
-        img.src = game.img;
-        img.onerror = () => { img.src = 'https://via.placeholder.com/150?text=' + game.name; };
+		function filterGames(q) {
+			const query = q.toLowerCase();
+			const filtered = allGames.filter(g => g.name.toLowerCase().includes(query));
+			render(filtered, grid);
+		}
 
-        const label = document.createElement("div");
-        label.className = "label";
-        label.textContent = game.name;
+		function applyTheme(t) { document.body.className = t; localStorage.setItem("novaTheme", t); closeDropdown(); }
+		function toggleThemes() { themeDropdown.classList.toggle("active"); }
+		function closeDropdown() { themeDropdown.classList.remove("active"); }
 
-        d.appendChild(img);
-        d.appendChild(label);
-        container.appendChild(d);
-    });
-}
+		document.addEventListener("click", (e) => {
+			if (!e.target.closest("#themeDropdown") && !e.target.closest(".menuBtn")) closeDropdown();
+		});
 
-function launch(game) {
-    recentGames = recentGames.filter(g => g.link !== game.link);
-    recentGames.unshift(game);
-    recentGames = recentGames.slice(0, 10);
-    localStorage.setItem("recentGames", JSON.stringify(recentGames));
-    window.location.href = game.link;
-}
-
-function filterGames(q) {
-    const query = q.toLowerCase();
-    const filtered = allGames.filter(g => g.name.toLowerCase().includes(query));
-    render(filtered, grid);
-}
-
-function showView(v) {
-    Object.values(views).forEach(x => x.classList.remove("active"));
-    views[v].classList.add("active");
-    
-    if (v === "recent") {
-        render(recentGames, recentGrid);
-        sectionTitle.textContent = "Recent Games";
-    } else if (v === "home") {
-        render(allGames, grid);
-        sectionTitle.textContent = "All Games";
-    } else {
-        sectionTitle.textContent = "About Nova";
-    }
-}
-
-function applyTheme(t) {
-    document.body.className = t;
-    localStorage.setItem("novaTheme", t);
-    closeDropdown();
-}
-
-function toggleThemes() { themeDropdown.classList.toggle("active"); }
-function closeDropdown() { themeDropdown.classList.remove("active"); }
-
-document.addEventListener("click", (e) => {
-    if (!e.target.closest("#themeDropdown") && !e.target.closest(".menuBtn")) closeDropdown();
-});
-
-initApp();
-
-let savedTheme = localStorage.getItem("novaTheme") || "nebula";
-document.body.className = savedTheme;
-		</script>
-
+		initApp();
+		document.body.className = localStorage.getItem("novaTheme") || "nebula";
+	</script>
 </body>
 
 </html>
