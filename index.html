@@ -1,202 +1,326 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Nova Study</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Study</title>
 
-<style>
-body {
-  margin: 0;
-  font-family: system-ui, Arial;
-  background: #0f0f14;
-  color: #f2f2f7;
-}
+    <style>
+        :root {
+            --accent: #b46bff;
+            --accent2: #ff4fd8;
+            --bg-sidebar: #12121a;
+            --bg-main: #0f0f14;
+            --bg-card: #171722;
+            --text-main: #f2f2f7;
+            --border: rgba(180, 107, 255, 0.2);
+        }
 
-.app {
-  display: flex;
-  height: 100vh;
-}
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, Arial, sans-serif;
+            background: var(--bg-main);
+            color: var(--text-main);
+            overflow: hidden;
+        }
 
-/* SIDEBAR */
-.sidebar {
-  width: 270px;
-  background: #12121a;
-  padding: 16px;
-  border-right: 1px solid rgba(180,107,255,0.2);
-}
+        .app {
+            display: flex;
+            height: 100vh;
+        }
 
-.logo {
-  color: #b46bff;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 270px;
+            background: var(--bg-sidebar);
+            padding: 16px;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
 
-/* COURSE BUTTONS */
-.course {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px;
-  cursor: pointer;
-  border-radius: 10px;
-  margin-bottom: 6px;
-}
+        .logo {
+            color: var(--accent);
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-.course:hover {
-  background: rgba(180,107,255,0.08);
-}
+        .course {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            cursor: pointer;
+            border-radius: 10px;
+            margin-bottom: 6px;
+            transition: background 0.2s;
+            font-size: 14px;
+            font-weight: 500;
+        }
 
-.icon {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-size: 12px;
-  color: white;
-}
+        .course:hover {
+            background: rgba(180, 107, 255, 0.08);
+        }
 
-.a { background: #a855f7; }
-.g { background: #ec4899; }
-.s { background: #f97316; }
+        .icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
 
-/* MAIN */
-.main {
-  flex: 1;
-  padding: 20px;
-}
+        .icon.d { background: #6366f1; }
+        .icon.a { background: #a855f7; }
+        .icon.g { background: #ec4899; }
+        .icon.s { background: #f97316; }
 
-/* TOP */
-.top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+        /* --- TOGGLE SWITCH --- */
+        .toggle-container {
+            margin-top: auto;
+            border-top: 1px solid var(--border);
+            padding-top: 15px;
+        }
 
-.search {
-  padding: 10px;
-  width: 300px;
-  border-radius: 10px;
-  border: 1px solid rgba(180,107,255,0.2);
-  background: #171722;
-  color: white;
-}
+        .switch-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+        }
 
-/* CARDS */
-.card {
-  background: #171722;
-  padding: 14px;
-  margin-top: 10px;
-  border-radius: 12px;
-  border: 1px solid rgba(180,107,255,0.15);
-}
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 38px;
+            height: 20px;
+        }
 
-/* VIEWS */
-.view {
-  display: none;
-}
+        .switch input { opacity: 0; width: 0; height: 0; }
 
-.view.active {
-  display: block;
-}
-</style>
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #333;
+            transition: .4s;
+            border-radius: 20px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider { background-color: var(--accent); }
+        input:checked + .slider:before { transform: translateX(18px); }
+
+        /* --- MAIN CONTENT --- */
+        .main {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .search {
+            padding: 12px 16px;
+            width: 320px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: white;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search:focus {
+            border-color: var(--accent);
+        }
+
+        .card {
+            background: var(--bg-card);
+            padding: 18px;
+            margin-bottom: 12px;
+            border-radius: 14px;
+            border: 1px solid rgba(180, 107, 255, 0.1);
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* --- VIEW LOGIC --- */
+        .view { display: none; }
+        .view.active { display: block; animation: fadeIn 0.3s ease; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
-
 <body>
 
 <div class="app">
 
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-    <div class="logo">✦ Nova Study</div>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="logo">✦ Nova Study</div>
 
-    <div class="course" onclick="show('dashboard')">
-      <div class="icon a">D</div> Dashboard
+        <div class="course" onclick="show('dashboard')">
+            <div class="icon d">D</div> Dashboard
+        </div>
+
+        <div class="course" onclick="show('assignments')">
+            <div class="icon a">A</div> Assignments
+        </div>
+
+        <div class="course" onclick="show('grades')">
+            <div class="icon g">G</div> Grades
+        </div>
+
+        <div class="course" onclick="show('modules')">
+            <div class="icon s">M</div> Modules
+        </div>
+
+        <!-- CLOAK TOGGLE -->
+        <div class="toggle-container">
+            <div class="switch-wrap">
+                <span style="font-size: 13px; font-weight: 500;">About:Blank Cloak</span>
+                <label class="switch">
+                    <input type="checkbox" id="cloakToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
     </div>
 
-    <div class="course" onclick="show('assignments')">
-      <div class="icon a">A</div> Assignments
+    <!-- MAIN AREA -->
+    <div class="main">
+
+        <div class="top">
+            <h2 style="margin: 0; font-size: 24px;">Nova Study</h2>
+            <input class="search" id="mainSearch" placeholder="Search courses or enter code...">
+        </div>
+
+        <!-- DASHBOARD -->
+        <div id="dashboard" class="view active">
+            <h3 style="color: var(--accent);">Active Courses</h3>
+            <div class="card">📘 Algebra Progress: 62%</div>
+            <div class="card">📗 Geometry Quiz due Friday</div>
+            <div class="card">📕 Science Lab due Wednesday</div>
+        </div>
+
+        <!-- ASSIGNMENTS -->
+        <div id="assignments" class="view">
+            <h3 style="color: var(--accent);">Upcoming Assignments</h3>
+            <div class="card">Geometry Quiz Review — Due Friday</div>
+            <div class="card">Algebra Worksheet 5 — Due Monday</div>
+            <div class="card">Science Notes — Due Wednesday</div>
+        </div>
+
+        <!-- GRADES -->
+        <div id="grades" class="view">
+            <h3 style="color: var(--accent);">Semester Grades</h3>
+            <div class="card">Algebra: A-</div>
+            <div class="card">Geometry: B+</div>
+            <div class="card">Science: A</div>
+        </div>
+
+        <!-- MODULES -->
+        <div id="modules" class="view">
+            <h3 style="color: var(--accent);">Course Modules</h3>
+            <div class="card">Algebra Basics: Unit 1</div>
+            <div class="card">Geometry Shapes: Unit 4</div>
+            <div class="card">Science Labs: Chemistry Intro</div>
+        </div>
+
     </div>
-
-    <div class="course" onclick="show('grades')">
-      <div class="icon g">G</div> Grades
-    </div>
-
-    <div class="course" onclick="show('modules')">
-      <div class="icon s">M</div> Modules
-    </div>
-
-  </div>
-
-  <!-- MAIN -->
-  <div class="main">
-
-    <div class="top">
-      <h2>Nova Study</h2>
-      <input class="search" placeholder="Search...">
-    </div>
-
-    <!-- DASHBOARD -->
-    <div id="dashboard" class="view active">
-      <div class="card">📘 Algebra Progress: 62%</div>
-      <div class="card">📗 Geometry Quiz due Friday</div>
-      <div class="card">📕 Science Lab due Wednesday</div>
-    </div>
-
-    <!-- ASSIGNMENTS -->
-    <div id="assignments" class="view">
-      <div class="card">Geometry Quiz Review — Due Friday</div>
-      <div class="card">Algebra Worksheet 5 — Due Monday</div>
-      <div class="card">Science Notes — Due Wednesday</div>
-    </div>
-
-    <!-- GRADES -->
-    <div id="grades" class="view">
-      <div class="card">Algebra: A-</div>
-      <div class="card">Geometry: B+</div>
-      <div class="card">Science: A</div>
-    </div>
-
-    <!-- MODULES -->
-    <div id="modules" class="view">
-      <div class="card">Algebra Basics</div>
-      <div class="card">Geometry Shapes</div>
-      <div class="card">Science Labs</div>
-    </div>
-
-  </div>
 
 </div>
 
 <script>
-const code = "N0VA32";
+    const SECRET_CODE = "N0VA32";
+    const TARGET_FILE = "games.html"; 
 
-/* PAGE SWITCH */
-function show(page) {
-  document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
-  document.getElementById(page).classList.add("active");
-}
+    const cloakToggle = document.getElementById('cloakToggle');
+    const searchInput = document.getElementById('mainSearch');
 
-/* SECRET CODE → REDIRECT */
-document.querySelector(".search").addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
+    // --- PERSISTENCE ---
+    const savedSetting = localStorage.getItem('useCloak');
+    cloakToggle.checked = (savedSetting === null || savedSetting === 'true');
 
-    const val = e.target.value.trim().toUpperCase();
+    cloakToggle.addEventListener('change', () => {
+        localStorage.setItem('useCloak', cloakToggle.checked);
+    });
 
-    if (val === code) {
-      e.target.value = "";
-      e.target.placeholder = "Access granted...";
-
-      // 🔥 CHANGE THIS FILE NAME TO YOUR REPO FILE
-      window.location.href = "games.html";
-
-    } else {
-      e.target.value = "";
-      e.target.placeholder = "Access denied";
+    // --- VIEW SWITCHING ---
+    function show(pageId) {
+        document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+        document.getElementById(pageId).classList.add("active");
     }
 
-  }
-});
+    // --- LAUNCH LOGIC (Panic Redirect Removed) ---
+    searchInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            const val = e.target.value.trim().toUpperCase();
+
+            if (val === SECRET_CODE) {
+                e.target.value = "";
+                
+                if (cloakToggle.checked) {
+                    const win = window.open();
+                    if (!win) {
+                        alert("Please allow pop-ups for the cloak to work!");
+                        return;
+                    }
+
+                    win.document.title = "Nova"; 
+                    win.document.body.style.margin = "0";
+                    win.document.body.style.height = "100vh";
+                    win.document.body.style.overflow = "hidden";
+
+                    const iframe = win.document.createElement("iframe");
+                    iframe.style.border = "none";
+                    iframe.style.width = "100%";
+                    iframe.style.height = "100%";
+                    iframe.style.margin = "0";
+                    iframe.src = window.location.origin + "/" + TARGET_FILE;
+
+                    win.document.body.appendChild(iframe);
+
+                    // No window.location.replace here - Original tab stays open
+                } else {
+                    window.location.href = TARGET_FILE;
+                }
+            } else {
+                e.target.value = "";
+                e.target.placeholder = "Search... (Incorrect code)";
+                setTimeout(() => { e.target.placeholder = "Search..."; }, 2000);
+            }
+        }
+    });
 </script>
 
 </body>
