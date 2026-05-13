@@ -15,17 +15,29 @@
 
 *{box-sizing:border-box;}
 
+/* HIDE SCROLLBAR FOR ALL BROWSERS */
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
 body{
   margin:0;
   font-family:system-ui,Arial;
   color:#f2f2f7;
   overflow-x:hidden;
   min-height:100vh;
-
+  
+  /* FIXED BACKGROUND PREVENTS BREAKING ON SCROLL */
   background:
     radial-gradient(circle at 20% 30%, rgba(180,107,255,.25), transparent 45%),
     radial-gradient(circle at 80% 70%, rgba(255,79,216,.18), transparent 50%),
-    linear-gradient(180deg,var(--bg1),var(--bg2));
+    linear-gradient(180deg, var(--bg1), var(--bg2));
+  background-attachment: fixed;
 }
 
 /* BACKGROUND GRID */
@@ -37,6 +49,7 @@ body::after{
   background-size:90px 90px;
   opacity:.05;
   pointer-events:none;
+  z-index: -1;
 }
 
 /* TOP */
@@ -45,6 +58,8 @@ body::after{
   display:flex;
   align-items:center;
   justify-content:space-between;
+  position: relative;
+  z-index: 10;
 }
 
 .brand{
@@ -77,11 +92,9 @@ body::after{
   width:220px;
   padding:10px 12px;
   border-radius:12px;
-
   border:1px solid rgba(255,255,255,.15);
   background:rgba(255,255,255,.05);
   color:white;
-
   outline:none;
   backdrop-filter:blur(10px);
   transition:.2s;
@@ -105,19 +118,13 @@ body::after{
   width:860px;
   max-width:92%;
   position:relative;
-
   display:flex;
   justify-content:space-around;
   align-items:center;
-
   padding:28px 20px;
   border-radius:34px;
-
   background:linear-gradient(90deg,var(--accent),var(--accent2));
   box-shadow:0 14px 40px rgba(0,0,0,.45);
-
-  overflow:visible;
-
   transition:.3s;
 }
 
@@ -128,23 +135,14 @@ body::after{
   cursor:pointer;
   font-size:15px;
   font-weight:700;
-
   display:flex;
   flex-direction:column;
   align-items:center;
   gap:10px;
-
   transition:.2s;
 }
 
 .menuBtn:hover{transform:translateY(-3px);}
-
-.menuIcon{
-  width:28px;
-  height:28px;
-  border-radius:50%;
-  border:2px solid rgba(255,255,255,.8);
-}
 
 /* CENTER ORB */
 .centerOrb{
@@ -155,15 +153,12 @@ body::after{
   width:110px;
   height:110px;
   border-radius:50%;
-
   display:flex;
   align-items:center;
   justify-content:center;
-
   background:linear-gradient(135deg,var(--accent),var(--accent2));
   border:7px solid #090914;
   box-shadow:0 0 35px rgba(180,107,255,.5);
-
   z-index:999;
 }
 
@@ -185,19 +180,14 @@ body::after{
   top:120px;
   right:40px;
   width:220px;
-
   border-radius:18px;
-  overflow:hidden;
-
   background:rgba(15,15,30,.95);
   backdrop-filter:blur(10px);
   border:1px solid rgba(255,255,255,.08);
-
   opacity:0;
   transform:translateY(-10px);
   pointer-events:none;
   transition:.2s ease;
-
   z-index:99999;
 }
 
@@ -216,7 +206,7 @@ body::after{
   background:rgba(255,255,255,.08);
 }
 
-/* VIEW ANIMATION SYSTEM */
+/* VIEW SYSTEM */
 .view{
   opacity:0;
   transform:translateY(10px);
@@ -244,11 +234,9 @@ body::after{
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(5,1fr);
+  grid-template-columns:repeat(auto-fill, minmax(180px, 1fr));
   gap:14px;
-
-  padding:140px 20px 30px;
-
+  padding:40px 20px 30px;
   position:relative;
   z-index:1;
 }
@@ -259,10 +247,8 @@ body::after{
   border-radius:18px;
   overflow:hidden;
   cursor:pointer;
-
   background:rgba(20,20,35,.4);
   border:1px solid rgba(255,255,255,.08);
-
   transition:.2s;
   position:relative;
 }
@@ -290,19 +276,6 @@ body::after{
   background:linear-gradient(to top, rgba(0,0,0,.85), transparent);
 }
 
-/* ABOUT */
-.aboutBox{
-  grid-column:1/-1;
-  padding:22px;
-  max-width:900px;
-  margin:0 auto;
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.12);
-  border-radius:18px;
-  line-height:1.7;
-  backdrop-filter:blur(10px);
-}
-
 /* THEMES */
 .nebula{--accent:#b46bff;--accent2:#ff4fd8;--bg1:#050510;--bg2:#0b0b1d;}
 .aqua{--accent:#53d8ff;--accent2:#4d7cff;--bg1:#04111a;--bg2:#071d2b;}
@@ -321,23 +294,18 @@ body::after{
     <div class="logo">✦</div>
     <div class="title">Nova Games</div>
   </div>
-
   <input class="searchBar" placeholder="Search games..." oninput="filterGames(this.value)">
 </div>
 
 <div class="menuWrap">
   <div class="menu">
-
     <button class="menuBtn" onclick="showView('home')">Home</button>
     <button class="menuBtn" onclick="showView('about')">About</button>
-
     <div class="centerOrb">
       <div class="centerInner">✦</div>
     </div>
-
     <button class="menuBtn" onclick="showView('recent')">Recent</button>
     <button class="menuBtn" onclick="toggleThemes()">Themes</button>
-
   </div>
 </div>
 
@@ -358,13 +326,9 @@ body::after{
 
 <div id="about" class="view">
   <div class="grid">
-    <div class="aboutBox">
+    <div class="aboutBox" style="grid-column: 1/-1; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 18px;">
       <h2 style="color:var(--accent);">Nova Games</h2>
-
-      <p>Nova Games is a lightweight browser-based game launcher built for fast, smooth, distraction-free gameplay.</p>
-
-      <p>It focuses on instant launching, clean UI, and theme customization.</p>
-
+      <p>Nova Games is a lightweight browser-based game launcher.</p>
       <p><b>GitHub:</b> https://github.com/greyisgreat/Nova/tree/main</p>
     </div>
   </div>
@@ -375,8 +339,8 @@ body::after{
 </div>
 
 <script>
-
-let games=[], icons={};
+let allGames=[];
+let icons={};
 let recentGames=JSON.parse(localStorage.getItem("recentGames"))||[];
 
 const grid=document.getElementById("grid");
@@ -390,85 +354,67 @@ const views={
   recent:document.getElementById("recent")
 };
 
-let allGames=[];
-
 Promise.all([
-  fetch("games.json").then(r=>r.json()),
-  fetch("icons.json").then(r=>r.json())
+  fetch("games.json").then(r=>r.json()).catch(()=>[]),
+  fetch("icons.json").then(r=>r.json()).catch(()=>({}))
 ]).then(([g,i])=>{
   allGames=g;
   icons=i;
   build(allGames);
-  showView("home");
 });
 
-/* CLEAN NAME */
 function cleanName(path){
   let parts=path.split("/");
-  let name=(parts.at(-1)==="index.html")
-    ? parts.at(-2)
-    : parts.at(-1).replace(".html","");
-
+  let name=(parts.at(-1)==="index.html") ? parts.at(-2) : parts.at(-1).replace(".html","");
   return name.replace(/[-_]/g," ").replace(/\b\w/g,c=>c.toUpperCase());
 }
 
-/* BUILD */
 function build(list){
   grid.innerHTML="";
   list.forEach(game=>{
     const d=document.createElement("div");
     d.className="game";
     d.onclick=()=>launch(game);
-
     const img=document.createElement("img");
     img.src=icons[game]||"";
-
     const label=document.createElement("div");
     label.className="label";
     label.textContent=cleanName(game);
-
     d.appendChild(img);
     d.appendChild(label);
     grid.appendChild(d);
   });
 }
 
-/* FILTER */
 function filterGames(q){
   q=q.toLowerCase();
   build(allGames.filter(g=>cleanName(g).toLowerCase().includes(q)));
 }
 
-/* RECENT */
+function showView(v){
+  Object.values(views).forEach(x=>x.classList.remove("active"));
+  views[v].classList.add("active");
+  if(v==="recent") buildRecent();
+  sectionTitle.textContent = v.charAt(0).toUpperCase() + v.slice(1) + " Games";
+}
+
 function buildRecent(){
   recentGrid.innerHTML="";
   recentGames.forEach(game=>{
     const d=document.createElement("div");
     d.className="game";
     d.onclick=()=>launch(game);
-
     const img=document.createElement("img");
     img.src=icons[game]||"";
-
     const label=document.createElement("div");
     label.className="label";
     label.textContent=cleanName(game);
-
     d.appendChild(img);
     d.appendChild(label);
     recentGrid.appendChild(d);
   });
 }
 
-/* NAV */
-function showView(v){
-  Object.values(views).forEach(x=>x.classList.remove("active"));
-  views[v].classList.add("active");
-
-  if(v==="recent") buildRecent();
-}
-
-/* LAUNCH */
 function launch(game){
   recentGames=recentGames.filter(g=>g!==game);
   recentGames.unshift(game);
@@ -477,7 +423,6 @@ function launch(game){
   window.location.href=game;
 }
 
-/* THEMES */
 function applyTheme(t){
   document.body.className=t;
   localStorage.setItem("novaTheme",t);
@@ -492,21 +437,14 @@ function closeDropdown(){
   themeDropdown.classList.remove("active");
 }
 
-/* CLOSE EVENTS */
 document.addEventListener("click",(e)=>{
-  if(!e.target.closest("#themeDropdown") &&
-     !e.target.closest(".menuBtn")){
+  if(!e.target.closest("#themeDropdown") && !e.target.closest(".menuBtn")){
     closeDropdown();
   }
 });
 
-window.addEventListener("scroll",closeDropdown);
-window.addEventListener("wheel",closeDropdown);
-window.addEventListener("touchmove",closeDropdown);
-
-/* LOAD THEME */
 let saved=localStorage.getItem("novaTheme")||"nebula";
-document.body.classList.add(saved);
+document.body.className=saved;
 
 </script>
 
